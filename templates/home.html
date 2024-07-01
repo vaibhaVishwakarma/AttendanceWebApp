@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+    <script>
+        const form = document.createElement("form");
+        form.action = "/post"
+        const table = document.createElement("table");
+        table.className = "table-fixed border-collapse border border-gray-400 w-full";
+
+        for(let i = 0; i < 5; i++) {
+            let row = document.createElement("tr");
+            for(let j = 0; j < 12; j++) {
+                let cell = document.createElement("td");
+                let input = document.createElement("input");
+                input.type = "text";
+                input.placeholder = "class-code";
+                input.className = "bg-gray-300 w-full px-2 py-1 border border-gray-300";
+                cell.appendChild(input);
+                cell.className = "border border-gray-400 p-1";
+                row.appendChild(cell);
+            }
+            table.appendChild(row);
+        }
+
+        form.appendChild(table);
+
+        const sub = document.createElement("button")
+        sub.innerText = "submit"
+        sub.className="bg-gray-300"
+        form.appendChild(sub)
+        document.body.appendChild(form);
+
+
+    </script>
+</body>
+</html>

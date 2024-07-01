@@ -1,0 +1,4 @@
+fastapi
+bson 
+jinja2
+pydantic
