@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev":"tailwindcss -i ./input.css -o ./templates/output.css --watch "
+    "dev":"tailwindcss -i ./input.css -o ./templates/output.css --watch ",
+    "uvi":"uvicorn app:app --reload --host=0.0.0.0 --port=8008"
+  
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./output.css">
+    <style>.paste-button {
+        position: relative;
+        display: block;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      
+      .button {
+        background-color: #4CAF50;
+        color: #212121;
+        padding: 10px 15px;
+        font-size: 15px;
+        font-weight: bold;
+        border: 2px solid transparent;
+        border-radius: 15px;
+        cursor: pointer;
+      }
+      
+      .dropdown-content {
+        display: none;
+        font-size: 13px;
+        position: absolute;
+        z-index: 1;
+        min-width: 200px;
+        background-color: #212121;
+        border: 2px solid #4CAF50;
+        border-radius: 0px 15px 15px 15px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      }
+      
+      .dropdown-content a {
+        color: hwb(120 87% 11%);
+        padding: 8px 10px;
+        text-decoration: none;
+        display: block;
+        transition: 0.1s;
+      }
+      
+      .dropdown-content a:hover {
+        background-color: #4CAF50;
+        color: #212121;
+      }
+      
+      .dropdown-content a:focus {
+        background-color: #212121;
+        color: #4CAF50;
+      }
+      
+      .dropdown-content #top:hover {
+        border-radius: 0px 13px 0px 0px;
+      }
+      
+      .dropdown-content #bottom:hover {
+        border-radius: 0px 0px 13px 13px;
+      }
+      
+      .paste-button:hover button {
+        border-radius: 15px 15px 0px 0px;
+      }
+      
+      .paste-button:hover .dropdown-content {
+        display: block;
+      }
+      </style>
+</head>
+<body class="bg-slate-900">
+    <form id = "timetable" action="/post"></form>
+
+
+
+
+<script>
+    const table1 = document.createElement("table")
+    table1.className="border  border-blue-200 border-spacing-4 md:border-spacing-8 w-full  rounded"
+
+    create_table1();
+    const tb1 = document.createElement("tbody")
+    getTable1body();
+    function getTable1body(){const days = ["Monday" , "Tuesday" , "Wednesday" , "Thursday" , "Friday","Saturday","Sunday"]
+    for(let i = 0 ; i<7 ; i++){
+        let row = document.createElement("tr")
+        row.className=` h-10 text-center cursor-pointer rounded-md`
+        let day = document.createElement("td")
+        day.innerHTML = days[i];
+        day.className=` bg-slate-700 dark:text-blue-200 font-semibold hover:bg-slate-800 duration-1000 delay-10 `
+        row.append(day)
+        for(let j=0 ; j<12 ; j++){
+            row.append(getInputtd(i,j))
+        }
+    tb1.append(row);
+
+}}
+    const lastRow = document.createElement("tr");
+    lastRow.className="border border- blue-300 dark:border-slate-100 font-semibold text-blue-900 dark:text-blue-200 text-right"
+
+    tb1.append(lastRow)
+
+    table1.append(tb1)
+
+    const form = document.querySelector("#timetable")
+    form.className="py-1"
+
+    function getInputtd(i,j){
+        const td = document.createElement("td")
+        td.className="px-3 text-centre"
+        const inp = document.createElement("input")
+        inp.className=`cursor-pointer rounded-md delay-10 duration-1000 bg-amber-200 h-8 uppercase w-full text-blue-900 hover:bg-cyan-200 placeholder:text-slate-500 placeholder:lowercase text-center`
+        inp.addEventListener("input",(e)=>{
+            if(inp.value.trim() !==""){
+                inp.classList.remove("bg-amber-200")
+                inp.classList.add("bg-green-200")
+            }else{
+                inp.classList.remove("bg-green-200")
+                inp.classList.add("bg-amber-200")
+            }
+
+        })
+        inp.placeholder="-"
+        inp.id = `${i},${j}`
+        td.append(inp)
+        return td           
+    }
+
+    function create_table1(){
+    const arr = ["Time"  , "8:00","08:50" , "09:50" , "10:40" ,"11:40", "12:30" ,"14:00" ,"14:50" ,"15:50","16:40","17:40","18:30",]
+    
+    const table1_head = document.createElement("thead")
+    
+    table1_head.className="w-1/13 rounded-lg cursor-pointer border border-blue-300 dark:border-slate-100 font-semibold p-4 text-blue-900 dark:text-blue-200 text-center"
+    const table1_titles = document.createElement("tr")
+    
+    for(let i = 0 ; i<13 ; i++){
+        let slot_ = getth(arr[i])
+        slot_.className="delay-10 duration-1000 hover:bg-slate-800"
+        table1_titles.append(slot_)
+    }
+    table1_titles.className="bg-slate-700 rounded-md"
+    table1_head.append(table1_titles)
+    table1.append(table1_head)
+
+    function getth(str){
+        const th = document.createElement("th")
+        th.className = "text-center"
+        th.innerHTML=`<p> ${str}</p>`
+        return th
+    }}
+
+
+
+
+
+    //start date and end date
+    let elem = document.createElement("h3"); elem.innerText="From - Till Dates" ;
+    elem.className="hover:bg-slate-700 delay-10 rounded-md duration-1000 text-center text-xl text-blue-200 font-extrabold bg-slate-600 underline py-4 border border-blue-200"
+    document.body.append(elem);
+
+    let parentDiv = document.createElement("div")
+    parentDiv.className="grid grid-cols-2 p-5 flex flex-row place-items-center"
+    let div1 = document.createElement("div")
+    let div2 = document.createElement("div")
+    div2.className="date flex flex-col gap-2"
+    div1.className="date flex flex-col gap-2"
+    const span = document.createElement("span")
+    const input = document.createElement("input")
+    const span2 = document.createElement("span")
+    const input2 = document.createElement("input")
+    span.innerHTML="From"
+    span2.innerHTML="Till"
+    input.type="date"
+    input2.type="date"
+    let spanstyle="text-slate-100 hover:bg-slate-400 delay-10 duration-1000 font-bold pl-2 border-2 border-dashed rounded-md text-center"
+    let inputstyle="cursor-pointer placeholder-slate-100 h-10 rounded-md hover:bg-blue-400 delay-10 duration-1000 font-semibold text-slate-100 bg-blue-600 text-center border-none " 
+    span.className=`${spanstyle}`
+    span2.className=`${spanstyle}`
+    input.className=`${inputstyle}`
+    input2.className=`${inputstyle}`
+    div1.append(span)
+    div1.append(input)
+    div2.append(span2)
+    div2.append(input2)
+    parentDiv.append(div1)
+    parentDiv.append(div2)
+    document.body.append(parentDiv)
+    input.addEventListener("input" , dateChange)
+    input2.addEventListener("input" , dateChange)
+    function dateChange(e){
+        if(e.target.value){
+            e.target.classList.remove("bg-blue-600")
+            e.target.classList.add("bg-green-200")
+            e.target.classList.remove("text-slate-100")
+        }else{
+            e.target.classList.remove("bg-green-200")
+            e.target.classList.add("bg-blue-600")
+            e.target.classList.add("text-slate-100")
+        }
+    }
+    
+    
+
+
+    //heading
+    elem = document.createElement("h3"); elem.innerText="Instructional Holidays & Absent Dates" ;
+    elem.className="hover:bg-slate-700 rounded-md delay-10 duration-1000 text-center text-blue-200 font-extrabold text-xl bg-slate-600 underline py-8 border border-blue-200"
+    document.body.append(elem);
+    const btnDiv = document.createElement("div")
+    const plus_btn = document.createElement("button")
+
+    btnDiv.className="grid px-8 m-4 "
+    plus_btn.innerHTML="<span class='text-slate-200 text-xl font-bold'> ADD </span>"
+    plus_btn.className="bg-slate-500 delay-10 duration-1000 hover:bg-slate-700 border-solid border-2 border-slate-200 rounded-lg h-20"
+    
+    
+    
+
+    let list = document.createElement("div")
+    let allRows = []
+
+    //first row initialisation
+    allRows.push(spawnRow(id=`0`,options=["--Day Type--","Holiday","Absent","Instructional"]))
+    list.append(allRows[0])
+
+
+    plus_btn.addEventListener("click" , ()=>{
+        let currRow = spawnRow(id=`${allRows.length}`,options=["--Day Type--","Holiday","Absent","Instructional"])
+        allRows.push(currRow)
+        allRows.reverse()
+        allRows.forEach((x)=>{list.append(x)})
+      
+        allRows.reverse()
+
+
+    
+    },false);
+    btnDiv.append(plus_btn)
+    function spawnRow(id,options){
+        const unit = document.createElement("div")
+        unit.className="grid grid-cols-1 p-4 h-auto";
+        const selector = document.createElement("select")
+        selector.className=" rounded-md h-10 bg-blue-600 text-slate-100"
+        unit.id=id;
+        for (let x in options) {
+            selector.options[selector.options.length] = new Option(options[x], options[x]);
+            selector.options[selector.options.length-1].className="h-20";
+
+        }
+        selector.onchange = function() {
+            
+            let kid = unit.children
+            if(kid.length===3){
+                kid[2].remove()
+                }
+            if(selector.value=== options[0]){
+                
+                kid[1].remove()
+            }
+            if(selector.value!== options[0] && kid.length<2)
+            {
+            const dateSel = document.createElement("input")
+            dateSel.type="date"
+            unit.append(dateSel)}
+            
+            daysList=["--week day--","Monday","Tuesday","Wednesday","Thursday","Friday"]
+            if(selector.value===options[3]){
+                const daySel = document.createElement("select")
+                
+                for (let x in daysList) {
+                    daySel.options[daySel.options.length] = new Option(daysList[x], daysList[x]);
+                }
+                unit.append(daySel);
+
+
+            }
+            let commonstyle = "p-5 gap-10 rounded-xl h-20"
+            if(kid.length===1) unit.className=`grid grid-cols-1 ${commonstyle}`;
+            if(kid.length===2) unit.className=`grid grid-cols-3 ${commonstyle}`;
+            if(kid.length===3) unit.className=`grid grid-cols-3 ${commonstyle}`;
+            let style="bg-blue-600 hover:bg-slate-300 text-slate-100 hover:text-slate-800";
+            for(let i=0 ; i<kid.length ; i++){
+                kid[i].className=style;
+            }
+            kid[1].classList.add("w-full")
+            
+
+            
+
+
+        
+        }
+    //          //empty Chapters- and Topics- dropdowns
+    //         chapterSel.length = 1;
+    //         topicSel.length = 1;
+    //         //display correct values
+    //         for (var y in subjectObject[this.value]) {
+    //         topicSel.options[topicSel.options.length] = new Option(y, y);
+    //         }
+    //     }
+        
+    
+    unit.append(selector)
+    return unit
+    }
+
+
+    // row.append()
+
+    btnDiv.append(list)
+    document.body.append(btnDiv)
+    const submit= document.createElement("div")
+    const subbtn = document.createElement("button")
+    subbtn.type = "submit"
+    subbtn.innerHTML = "Submit"
+    subbtn.className="align-center delay-10 duration-1000 bg-slate-500 hover:bg-slate-700 rounded-lg w-[150px] border-solid border-zinc-50 border-2 h-10 font-bold"
+    submit.className=" flex grid place-items-center text-white"
+    submit.append(subbtn)
+    document.body.append(submit)
+
+
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+
+    
+
+
+
+    
+    form.append(table1)
+    
+
+
+    function createCell(i,j){
+        let child_div = document.createElement("div");
+        let inp = document.createElement("input");
+        inp.type = "text";
+        inp.placeholder = "class-code";
+        if(i && j) {inp.id=`${i},${j}`;}
+        inp.className = "bg-green-200 w-full px-2 py-1 border border-gray-300";
+        child_div.append(inp)
+        return child_div
+    }
+
+
+
+    function createSlot (){
+        const slot = document.createElement("tr");
+        for(let i= 0 ; i<13 ; i++){
+            const cell = document.createElement("td");
+            const text = document.createElement("p");
+            text.innerText=arr[i];
+            console.log(text.text)
+            
+            cell.className="bg-cyan-400 border-collapse border-spacing-4 md:border-spacing-8";
+            cell.appendChild(text);
+            slot.append(cell);
+        }
+        document.body.append(slot)
+    }
+    
+    subbtn.addEventListener("click",()=>{ 
+        for(let i = 0 ; i<12 ; i++){
+        for(let j =0; j<12 ; j++){
+            console.log(document.getElementById(`${i},${j}`).value)
+        }
+    }});
+
+</script>
+
+
+
+</body>
+<script>
+
+</script>
+
+</html>

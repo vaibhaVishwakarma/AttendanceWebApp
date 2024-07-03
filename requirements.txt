@@ -1,4 +1,4 @@
 fastapi
-bson 
+uvicorn[standard] 
 jinja2
 pydantic
