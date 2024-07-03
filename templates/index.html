@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./static/output.css">
     <link rel="stylesheet" href="./output.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/thinline.css">
     <style>.paste-button {
         position: relative;
         display: block;
@@ -69,13 +71,199 @@
       }
       </style>
 </head>
-<body class="bg-slate-900">
+<body class="bg-gradient-to-r from-slate-600 to-slate-800">
+    <div class="wrapper  flex  w-full  p-4 pb-0 ">
+        <div class="title flex items-center mb-[45px]">
+          <img src="../static/tag.svg" alt="icon" class="w-8 h-8">
+        </div>
+        <div class="content flex flex-wrap min-w-screen-sm w-full gap-3  p-4">
+            <ul id="tagslist" class="flex flex-wrap gap-3 w-full list-none p-0 m-0">
+                <input id="inptag" type="text" placeholder="Enter Course Code" spellcheck="false" class="border-none font-semibold outline-none placeholder-slate-200 rounded p-2 w-full bg-gradient-to-r from-slate-600 to-slate-700  text-slate-100">
+            </ul>
+        </div>
+        <div class="details mt-[53px] h-10 ">
+            
+            <button class="bg-red-500 font-semibold text-slate-100 rounded px-4 py-2 hover:bg-red-400 delay-10 duration-1000 ">Clear</button>
+        </div>
+    </div>
+
+
+
     <form id = "timetable" action="/post"></form>
 
 
 
 
 <script>
+    // tags script 
+        let ul = document.querySelector("#tagslist"),
+        tginput = document.querySelector("#inptag")
+
+
+        rand = [ "BEEE101L","BCSE202P","BECE204L","BMAT205L","BCSE101E"];
+        tags = []
+        for(let i=0 ; i<3 ; i++){
+            tags.push(rand.pop(Math.floor(Math.random()*10/rand.length)))
+
+        }
+        tagqueue = [] 
+        let ghostElement = null;
+        createTag();
+
+
+
+        function createTag(){
+            ul.querySelectorAll("li").forEach(li => li.remove());
+            tags.slice().reverse().forEach(tag =>{
+                let liTag = `<li class="cursor-pointer font-semibold rounded-md px-2 delay-10 duration-1000 bg-blue-600 hover:bg-slate-300 text-slate-100 hover:text-slate-800" draggable="true" > ${tag} <i dragable="true" class="uit uit-multiply" onclick="remove(this, '${tag}')"></i></li>`;
+                ul.insertAdjacentHTML("afterbegin", liTag);
+            });
+            ul.querySelectorAll("li").forEach(tag => {tag.addEventListener('dragstart', function(event) {
+                console.log(event.target.innerText)
+                tagqueue.push(event.target.innerText)});
+
+// Touch event listeners for mobile devices
+        tag.addEventListener('touchstart', function(event) {
+            event.preventDefault();
+            handleTouchStart(event, tag);
+            console.log("touched"   )
+            
+        });
+        tag.addEventListener('touchmove', function(event) {
+            event.preventDefault();
+            handleTouchMove(event, tag);
+            //console.log(event)
+            
+        });
+        tag.addEventListener('touchend', function(event) {
+            event.preventDefault();
+            handleTouchEnd(event, tag);
+            console.log("ended")
+        });
+        
+        })
+
+        };
+
+        function remove(element, tag){
+            let index  = tags.indexOf(tag);
+            tags = [...tags.slice(0, index), ...tags.slice(index + 1)];
+            element.parentElement.remove();
+
+        }
+
+        function addTag(e){
+            if(e.key == "Enter"){
+                let tag = e.target.value.replace(/\s+/g, ' ');
+                if(tag.length > 1 && !tags.includes(tag)){
+                    {
+                        tag.split(',').forEach(tag => {
+                            tags.push(tag);
+                            createTag();
+                        });
+                    }
+                }
+                e.target.value = "";
+            }
+        }
+
+        tginput.addEventListener("keyup", addTag);
+
+        const removeBtn = document.querySelector(".details button");
+        removeBtn.addEventListener("click", () =>{
+            tags.length = 0;
+            ul.querySelectorAll("li").forEach(li => li.remove());
+
+        });
+
+
+
+
+        function handleTouchStart(event, tag) {
+    // Create ghost element
+    ghostElement = tag.cloneNode(true);
+    ghostElement.style.position = 'absolute';
+    ghostElement.style.pointerEvents = 'none';
+    ghostElement.style.opacity = '0.5';
+    ghostElement.style.transform = 'scale(1.1)';
+    ghostElement.style.transition = 'transform 0.2s';
+    document.body.appendChild(ghostElement);
+
+    // Position the ghost element at the touch point
+    let touch = event.touches[0];
+    ghostElement.style.left = `${touch.clientX}px`;
+    ghostElement.style.top = `${touch.clientY}px`;
+
+    tagqueue.push(tag.innerText);
+}
+
+function handleTouchMove(event, tag) {
+    let touch = event.touches[0];
+    
+    // Move the ghost element
+    ghostElement.style.left = `${touch.clientX}px`;
+    ghostElement.style.top = `${touch.clientY}px`;
+
+    let target = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    if (target && target !== tag && target.tagName === 'LI') {
+        let ul = target.parentElement;
+        ul.insertBefore(tag, target.nextSibling || target);
+    }
+}
+
+function handleTouchEnd(event, tag) {
+    // Remove the ghost element
+    if (ghostElement) {
+        ghostElement.remove();
+        ghostElement = null;
+    }
+
+    let touch = event.changedTouches[0];
+    let target = document.elementFromPoint(touch.clientX, touch.clientY);
+    target.value=tag.innerText
+
+    if (target && target !== tag && target.tagName === 'LI') {
+        console.log('Dropped on:', target.innerText);
+    } else {
+        console.log('Dropped outside the list');
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     const table1 = document.createElement("table")
     table1.className="border  border-blue-200 border-spacing-4 md:border-spacing-8 w-full  rounded"
 
@@ -110,6 +298,7 @@
         const td = document.createElement("td")
         td.className="px-3 text-centre"
         const inp = document.createElement("input")
+        inp.type = "text"
         inp.className=`cursor-pointer rounded-md delay-10 duration-1000 bg-amber-200 h-8 uppercase w-full text-blue-900 hover:bg-cyan-200 placeholder:text-slate-500 placeholder:lowercase text-center`
         inp.addEventListener("input",(e)=>{
             if(inp.value.trim() !==""){
@@ -120,6 +309,13 @@
                 inp.classList.add("bg-amber-200")
             }
 
+        })
+        inp.addEventListener('dragover', function(event) {
+            event.preventDefault()
+        })
+        inp.addEventListener('drop', function(event) {
+            inp.value = (tagqueue.pop())
+            console.log("capture",inp.value)
         })
         inp.placeholder="-"
         inp.id = `${i},${j}`
@@ -242,7 +438,7 @@
         const unit = document.createElement("div")
         unit.className="grid grid-cols-1 p-4 h-auto";
         const selector = document.createElement("select")
-        selector.className=" rounded-md h-10 bg-blue-600 text-slate-100"
+        selector.className=" rounded-md h-10 font-semibold bg-blue-600 hover:bg-slate-300 text-slate-100 hover:text-slate-800"
         unit.id=id;
         for (let x in options) {
             selector.options[selector.options.length] = new Option(options[x], options[x]);
@@ -280,7 +476,7 @@
             if(kid.length===1) unit.className=`grid grid-cols-1 ${commonstyle}`;
             if(kid.length===2) unit.className=`grid grid-cols-3 ${commonstyle}`;
             if(kid.length===3) unit.className=`grid grid-cols-3 ${commonstyle}`;
-            let style="bg-blue-600 hover:bg-slate-300 text-slate-100 hover:text-slate-800";
+            let style="bg-blue-600 hover:bg-slate-300 font-semibold text-slate-100 hover:text-slate-800";
             for(let i=0 ; i<kid.length ; i++){
                 kid[i].className=style;
             }
@@ -313,6 +509,7 @@
     document.body.append(btnDiv)
     const submit= document.createElement("div")
     const subbtn = document.createElement("button")
+    subbtn.onclick = sendRequest
     subbtn.type = "submit"
     subbtn.innerHTML = "Submit"
     subbtn.className="align-center delay-10 duration-1000 bg-slate-500 hover:bg-slate-700 rounded-lg w-[150px] border-solid border-zinc-50 border-2 h-10 font-bold"
@@ -373,12 +570,75 @@
         document.body.append(slot)
     }
     
-    subbtn.addEventListener("click",()=>{ 
-        for(let i = 0 ; i<12 ; i++){
-        for(let j =0; j<12 ; j++){
-            console.log(document.getElementById(`${i},${j}`).value)
+
+
+
+
+    async function sendRequest() {
+        let data = [];
+        for (let i = 0; i < 7; i++) {
+            data[i] = [];  // Initialize each sub-array
+            for (let j = 0; j < 12; j++) {
+                let element = document.getElementById(`${i},${j}`);
+                if (element) {
+                    let value = element.value;
+                    data[i].push(value);
+                    console.log(value);
+                } else {
+                    data[i].push(null);  // Or handle the missing element case as needed
+                }
+            }
         }
-    }});
+        data.push([input.value , input2.value])
+        let temp=[]
+        allRows.forEach((item)=>{
+            console.log(item)
+            item.childNodes.forEach((e)=>{
+                temp.push(e.value)
+                });
+                data.push(temp);
+            temp=[];
+            
+    })
+    //console.log(allRows)
+        try {
+            const response = await fetch('/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ values: data })
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const responseData = await response.json();
+
+            // Display the response
+            const responseElement = document.getElementById('response');
+            if (responseElement) {
+                responseElement.textContent = JSON.stringify(responseData, null, 2);
+            } else {
+                console.error("Response element not found.");
+            }
+        } catch (error) {
+            const responseElement = document.getElementById('response');
+            if (responseElement) {
+                responseElement.textContent = 'Error: ' + error.message;
+            } else {
+                console.error("Response element not found.");
+            }
+        }
+    }
+
+
+
+
+
+
+    
 
 </script>
 
