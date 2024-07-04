@@ -33,6 +33,8 @@ templates = Jinja2Templates(directory = "templates")
 
 @app.get("/",response_class = HTMLResponse)
 async def getpage(request : Request):
+    print(templates.directory)
+    print(os.listdir(templates.directory))
     with open("./static/counter.pkl" , "rb") as f:
         num = pickle.load(f)
         
