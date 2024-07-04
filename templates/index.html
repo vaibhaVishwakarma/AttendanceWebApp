@@ -71,11 +71,14 @@
       }
       </style>
 </head>
-<body class="bg-gradient-to-r from-slate-600 to-slate-800">
+<body class="grid bg-gradient-to-r from-slate-600 to-slate-800">
     <!-- <body class="bg-slate-800"> -->
-        
+    {% if viewCount is defined %}<div class="text-extrabold place-items-center pt- h-[5px] text-center w-full text-xs text-slate-200">
+        <h20> you are @ {{viewCount}} 🔥 viewer of this site 🤗</h20>
+    </div>
+    {% endif %}
     <!-- <div class = "text-white w-full"><h2>Am I Debbared</h2><br><h8>Attendance Calculator</h8></div> -->
-    <div class="wrapper  flex  w-full  p-4 pb-0 ">
+    <div class="wrapper  flex  w-full  px-4   pb-0 ">
         <div class="title flex items-center mb-[45px]">
           <img src="../static/tag.svg" alt="icon" class="w-8 h-8">
         </div>

@@ -6,6 +6,10 @@ from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel 
 from datetime import datetime
+import pickle
+
+
+
 app=FastAPI()
 # Allow all origins for simplicity (configure this appropriately for production)
 app.add_middleware(
@@ -27,7 +31,13 @@ templates = Jinja2Templates(directory = "templates")
 
 @app.get("/",response_class = HTMLResponse)
 async def getpage(request : Request):
-    return templates.TemplateResponse("./index.html ",{"request":request}) 
+    with open("./static/counter.pkl" , "rb") as f:
+        num = pickle.load(f)
+        
+    with open("./static/counter.pkl" , "wb") as f:
+        print(num)
+        pickle.dump(num+1 , f)
+    return templates.TemplateResponse("./index.html ",{"request":request,"viewCount":num}) 
 @app.post("/submit" , response_model=ResponseModel)
 async def handle_form_submission(data:DataItem):
     print(data.values)
