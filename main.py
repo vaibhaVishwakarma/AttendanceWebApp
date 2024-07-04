@@ -7,10 +7,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel 
 from datetime import datetime
 import pickle
-
+from mangum import Mangum
 
 
 app=FastAPI()
+handler = Mangum(app)
 # Allow all origins for simplicity (configure this appropriately for production)
 app.add_middleware(
     CORSMiddleware,
@@ -37,7 +38,7 @@ async def getpage(request : Request):
     with open("./static/counter.pkl" , "wb") as f:
         print(num)
         pickle.dump(num+1 , f)
-    return templates.TemplateResponse("./index.html ",{"request":request,"viewCount":num}) 
+    return templates.TemplateResponse("./indx.html",{"request":request,"viewCount":num}) 
 @app.post("/submit" , response_model=ResponseModel)
 async def handle_form_submission(data:DataItem):
     print(data.values)
