@@ -1,104 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../static/output.css">
-    <!-- <link rel="stylesheet" href="./output.css"> -->
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/thinline.css">
-    <style>.paste-button {
-        position: relative;
-        display: block;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      }
-      
-      .button {
-        background-color: #4CAF50;
-        color: #212121;
-        padding: 10px 15px;
-        font-size: 15px;
-        font-weight: bold;
-        border: 2px solid transparent;
-        border-radius: 15px;
-        cursor: pointer;
-      }
-      
-      .dropdown-content {
-        display: none;
-        font-size: 13px;
-        position: absolute;
-        z-index: 1;
-        min-width: 200px;
-        background-color: #212121;
-        border: 2px solid #4CAF50;
-        border-radius: 0px 15px 15px 15px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      }
-      
-      .dropdown-content a {
-        color: hwb(120 87% 11%);
-        padding: 8px 10px;
-        text-decoration: none;
-        display: block;
-        transition: 0.1s;
-      }
-      
-      .dropdown-content a:hover {
-        background-color: #4CAF50;
-        color: #212121;
-      }
-      
-      .dropdown-content a:focus {
-        background-color: #212121;
-        color: #4CAF50;
-      }
-      
-      .dropdown-content #top:hover {
-        border-radius: 0px 13px 0px 0px;
-      }
-      
-      .dropdown-content #bottom:hover {
-        border-radius: 0px 0px 13px 13px;
-      }
-      
-      .paste-button:hover button {
-        border-radius: 15px 15px 0px 0px;
-      }
-      
-      .paste-button:hover .dropdown-content {
-        display: block;
-      }
-      </style>
-</head>
-<body class="bg-gradient-to-r from-slate-600 to-slate-800">
-    <!-- <body class="bg-slate-800"> -->
-        
-    <!-- <div class = "text-white w-full"><h2>Am I Debbared</h2><br><h8>Attendance Calculator</h8></div> -->
-    <div class="wrapper  flex  w-full  p-4 pb-0 ">
-        <div class="title flex items-center mb-[45px]">
-          <img src="../static/tag.svg" alt="icon" class="w-8 h-8">
-        </div>
-        <div class="content flex flex-wrap min-w-screen-sm w-full gap-3  p-4">
-            <ul id="tagslist" class="flex flex-wrap gap-3 w-full list-none p-0 m-0">
-                <input id="inptag" type="text" placeholder="Enter Course Code & Drag Tag" spellcheck="false" class="border-none font-semibold outline-none placeholder-slate-200 rounded p-2 w-full bg-gradient-to-r from-slate-600 to-slate-700  text-slate-100">
-            </ul>
-        </div>
-        <div class="details mt-[53px] h-10 ">
-            
-            <button class="bg-red-500 font-semibold text-slate-100 rounded px-4 py-2 hover:bg-red-400 delay-10 duration-1000 ">Clear</button>
-        </div>
-    </div>
-
-
-
-    <form id = "timetable" action="/post"></form>
-
-
-
-
-<script >
-  // tags script 
+// tags script 
 let ul = document.querySelector("#tagslist"),
 tginput = document.querySelector("#inptag")
 
@@ -410,11 +310,6 @@ if(e.target.value){
 }
 }
 
-let div3 = document.createElement("div")
-div3.className="col-span-2 animate-ping delay-10 duration-1000 mt-4 text-slate-200 mb-0 font-semibold"
-div3.textContent="* for CAT examinations beginning from eg- 19, attendance is marked for including & before 16"
-parentDiv.append(div3)
-
 
 
 
@@ -594,11 +489,10 @@ document.body.append(slot)
 
 let tablediv = document.createElement("div");
 let mytable = document.createElement("div");
-mytable.className="resulttable"
 
 tablediv.className = "mt-10 mb-10 grid place-items-center text-slate-200 w-full";
 tablediv.innerHTML = "<span class='w-[250px] h-10 py-2 delay-10 duration-1000 rounded-md text-slate-100  bg-gradient-to-r from-slate-4500 to-slate-600 animate-pulse text-center'>Press Submit 👆</span>";
-tablediv.append(mytable)
+
 document.body.append(tablediv);
 
 let tempdata;
@@ -631,85 +525,32 @@ allRows.forEach((item)=>{
 
 //console.log(allRows)
 try {
-const response = await fetch('/submit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ values: data })
-            });
+    const response = await fetch('/submit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ values: data })
+    });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
+    if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+    }
 
-            const responseData = await response.json();
-
-            // Display the response
-            if(responseData["status"] === "success"){  
-
-                                                        showResult( responseData["result"] 
-                                                                             , responseData["isdebar"]);}
-            else tablediv.innerHTML = "<span class='w-[250px] h-10 py-2 delay-10 duration-1000 rounded-md text-slate-100 bg-gradient-to-r from-amber-400 to-amber-500 animate-pulse text-center'>⚠️Invalid Data Provided...🔍</span>";
-
-        } catch (error) {
-            console.log(error.message)
-            tablediv.innerHTML = "<span class='w-[250px] h-10 py-2 delay-10 duration-1000 rounded-md text-slate-100 bg-gradient-to-r from-amber-400 to-amber-500 animate-pulse text-center'>Trouble Connecting... 🌐</span>";
-
-
-    // .then(response => {
-    //     if (!response.ok) {
-    //     throw new Error('Network response was not ok ' + response.statusText);
-    //     }
-    //     return response.json();
-    // })
-    // .then(data => {
-    //     console.log('Data received:', data);
-    //     // Do something with the data
-    // })
-    // .catch(error => {
-    //     console.error('There has been a problem with your fetch operation:', error);
-    // });
-    //.then( (response)=>{
-    //     setTimeout( async ()=>{
-    //         await response ; 
-    //     console.log("ok->",  await response)},1500)
-    //     return response
-    // })
-    // .then( (response)=>{
-    // responseData=response.json()
-    // console.log(responseData)
-    // if(responseData["status"] === "success") showResult( responseData["result"] 
-    //                                                                             , responseData["isdebar"]);
-    // else tablediv.innerHTML = "<span class='w-[250px] h-10 py-2 delay-10 duration-1000 rounded-md text-slate-100 bg-gradient-to-r from-amber-400 to-amber-500 animate-pulse text-center'>⚠️Invalid Data Provided...🔍</span>";
-
-
-    // })
-    // .catch( (error)=>{
-        
-    //     console.log("error=>",error)
-    //     tablediv.innerHTML = "<span class='w-[250px] h-10 py-2 delay-10 duration-1000 rounded-md text-slate-100 bg-gradient-to-r from-amber-400 to-amber-500 animate-pulse text-center'>Trouble Connecting... 🌐</span>";
-
-    // })
-
-//     if (!response.ok) {
-//         throw new Error('Network response was not ok ' + response.statusText);
-//     }
-
-//     const responseData = await response.json();
-//     console.log(responseData,responseData["status"],responseData["result"] 
-//         , responseData["isdebar"])
-//     console.log(response.ok)
+    const responseData = await response.json();
+    console.log(responseData,responseData["status"],responseData["result"] 
+        , responseData["isdebar"])
+    tempdata=responseData;
     
-//     if(responseData["status"] === "success") showResult( responseData["result"] 
-//                                                             , responseData["isdebar"]);
-//     else tablediv.innerHTML = "<span class='w-[250px] h-10 py-2 delay-10 duration-1000 rounded-md text-slate-100 bg-gradient-to-r from-amber-400 to-amber-500 animate-pulse text-center'>⚠️Invalid Data Provided...🔍</span>";
-// } catch (error) {
-//     console.log(error)
-//     tablediv.innerHTML = "<span class='w-[250px] h-10 py-2 delay-10 duration-1000 rounded-md text-slate-100 bg-gradient-to-r from-amber-400 to-amber-500 animate-pulse text-center'>Trouble Connecting... 🌐</span>";
+    if(responseData["status"] === "success") showResult( responseData["result"] 
+                                                            , responseData["isdebar"]);
+    else tablediv.innerHTML = "<span class='w-[250px] h-10 py-2 delay-10 duration-1000 rounded-md text-slate-100 bg-gradient-to-r from-amber-400 to-amber-500 animate-pulse text-center'>⚠️Invalid Data Provided...🔍</span>";
+} catch (error) {
+    console.log(error)
+    tablediv.innerHTML = "<span class='w-[250px] h-10 py-2 dlay-10 duration-1000 rounded-md text-slate-100 bg-gradient-to-r from-amber-400 to-amber-500 animate-pulse text-center'>Trouble Connecting... 🌐</span>";
 
-}}
-
+}
+}
 
 
 let mydata = {
@@ -720,12 +561,8 @@ let mydata = {
 
 
 function showResult(data,isdebar) {
-    mytable.remove()
-    console.log("removed mytable")
-    mytable = document.createElement("div");
-    mytable.className = isdebar?"resulttable bg-gradient-to-r from-red-500 to-red-700 grid w-[500px] place-items-center mt-4  border-none text-white outline-none rounded-lg":"resulttable bg-gradient-to-r from-green-500 to-green-700 grid w-[500px] place-items-center mt-4  border-none text-white outline-none rounded-lg";
-    tablediv.append(mytable)
-    tablediv.innerHTML = '';
+mytable.className = isdebar?"bg-gradient-to-r from-red-500 to-red-700 grid w-[500px] place-items-center mt-4  border-none text-white outline-none rounded-lg":"bg-gradient-to-r from-green-500 to-green-700 grid w-[500px] place-items-center mt-4  border-none text-white outline-none rounded-lg";
+tablediv.innerHTML = '';
 
     let row = document.createElement("div");
     row.className = "h-10 grid grid-cols-4 w-[500px] place-items-center gap-2";
@@ -784,16 +621,3 @@ tablediv.append(mytable);
 
 
 
-
-    
-
-</script>
-
-
-
-</body>
-<script>
-
-</script>
-
-</html>
