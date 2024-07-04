@@ -10,6 +10,8 @@ import pickle
 import os
 
 print(os.listdir())
+print(os.listdir("./templates"))
+print(os.listdir("./static"))
 app=FastAPI()
 # Allow all origins for simplicity (configure this appropriately for production)
 app.add_middleware(
