@@ -26,8 +26,8 @@ class DataItem(BaseModel):
 class ResponseModel(BaseModel):
     status: str
     data_received: List[List[str]]
-app.mount("/static", StaticFiles(directory="./static"), name="static")
-templates = Jinja2Templates(directory = "./templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory = "templates")
 
 @app.get("/",response_class = HTMLResponse)
 async def getpage(request : Request):
@@ -37,7 +37,7 @@ async def getpage(request : Request):
     with open("./static/counter.pkl" , "wb") as f:
         print(num)
         pickle.dump(num+1 , f)
-    return templates.TemplateResponse("./templates/index.html ",{"request":request,"viewCount":num}) 
+    return templates.TemplateResponse("index.html ",{"request":request,"viewCount":num}) 
 @app.post("/submit" , response_model=ResponseModel)
 async def handle_form_submission(data:DataItem):
     print(data.values)
