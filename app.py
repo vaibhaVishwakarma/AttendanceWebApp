@@ -39,7 +39,7 @@ async def getpage(request : Request):
     with open("./static/counter.pkl" , "wb") as f:
         print(num)
         pickle.dump(num+1 , f)
-    return templates.TemplateResponse("index.html ",{"request":request,"viewCount":num}) 
+    return templates.TemplateResponse("./index.html ",{"request":request,"viewCount":num}) 
 @app.post("/submit" , response_model=ResponseModel)
 async def handle_form_submission(data:DataItem):
     print(data.values)
