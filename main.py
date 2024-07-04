@@ -29,15 +29,58 @@ class ResponseModel(BaseModel):
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory = "templates")
 
-@app.get("/",response_class = HTMLResponse)
+
+# Temporary route to debug file access
+@app.get("/list-templates")
+async def list_templates():
+    import os
+    files = os.listdir("templates")
+    return {"files": files}
+
+# Temporary route to debug static file access
+@app.get("/list-static")
+async def list_static():
+    import os
+    files = os.listdir("static")
+    return {"files": files}
+
+@app.get("/list-root")
+async def list_static():
+    import os
+    files = os.listdir()
+    return {"files": files}
+
+
+@app.get("/temp2",response_class = HTMLResponse)
+
 async def getpage(request : Request):
-    with open("./static/counter.pkl" , "rb") as f:
+    with open("counter.pkl" , "rb") as f:
         num = pickle.load(f)
         
-    with open("./static/counter.pkl" , "wb") as f:
+    with open("counter.pkl" , "wb") as f:
         print(num)
         pickle.dump(num+1 , f)
-    return templates.TemplateResponse("./index.html ",{"request":request,"viewCount":num}) 
+    return templates.TemplateResponse("./index.html",{"request":request,"viewCount":num}) 
+
+@app.get("/temp",response_class = HTMLResponse)
+async def getpage(request : Request):
+    with open("counter.pkl" , "rb") as f:
+        num = pickle.load(f)
+        
+    with open("counter.pkl" , "wb") as f:
+        print(num)
+        pickle.dump(num+1 , f)
+    return templates.TemplateResponse("../index.html",{"request":request,"viewCount":num}) 
+
+@app.get("/",response_class = HTMLResponse)
+async def getpage(request : Request):
+    with open("counter.pkl" , "rb") as f:
+        num = pickle.load(f)
+        
+    with open("counter.pkl" , "wb") as f:
+        print(num)
+        pickle.dump(num+1 , f)
+    return templates.TemplateResponse("index.html",{"request":request,"viewCount":num}) 
 @app.post("/submit" , response_model=ResponseModel)
 async def handle_form_submission(data:DataItem):
     print(data.values)
