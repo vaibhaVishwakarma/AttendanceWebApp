@@ -7,9 +7,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel 
 from datetime import datetime
 import pickle
+import os
 
-
-
+print(os.listdir())
 app=FastAPI()
 # Allow all origins for simplicity (configure this appropriately for production)
 app.add_middleware(
