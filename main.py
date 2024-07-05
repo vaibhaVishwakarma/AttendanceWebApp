@@ -9,6 +9,8 @@ from datetime import datetime
 import pickle
 from mangum import Mangum
 
+from dependencies import uvicorn
+
 
 app=FastAPI()
 handler = Mangum(app)
@@ -38,7 +40,12 @@ async def getpage(request : Request):
     with open("./static/counter.pkl" , "wb") as f:
         print(num)
         pickle.dump(num+1 , f)
-    return templates.TemplateResponse("./indx.html",{"request":request,"viewCount":num}) 
+    return templates.TemplateResponse("./index.html",{"request":request,"viewCount":num}) 
+
+
+
+
+    
 @app.post("/submit" , response_model=ResponseModel)
 async def handle_form_submission(data:DataItem):
     print(data.values)
@@ -72,13 +79,16 @@ async def handle_form_submission(data:DataItem):
                 if data.values[i][ind] == "" : continue
                 data.values[i][ind] = str.upper(data.values[i][ind])
                 subjects.add(data.values[i][ind])
+        for i in range(7):
+            for ind in range(12):
+                if data.values[i][ind] == "" : continue
                 schedule[days[i]].append(list(subjects).index(data.values[i][ind])+1)
 
         subjects={i+1 : list(subjects)[i] for i in range(len(subjects))}
 
 
         dates = data.values[7]
-        start , end = [[datetime.strptime(dates[0], "%Y-%m-%d").strftime("%A").lower()[:3],int(dates[0][8:] ),int(dates[0][5:7]) ], [int(dates[1][8:] ),int(dates[1][5:7])] ]
+        start , end = [[datetime.strptime(dates[0], "%Y-%m-%d").strftime("%A").lower()[:3],int(dates[0][8:]),int(dates[0][5:7]) ], [int(dates[1][8:] ),int(dates[1][5:7])] ]
         special_days = data.values[8:]
         idays, absdays , hdays = [],[],[]
         for i in special_days:
@@ -155,7 +165,7 @@ async def handle_form_submission(data:DataItem):
             result[i] = round((abtt[i]/tt[i])*100,2)
             if result[i] < 75.00  : debbared=True
         result = { k : i for k,i in zip(result.keys(),zip(result.values() , tt.values() , abtt.values()))}
-        print(result)
+        print(daylist,hdays,idays,absdays,schedule)
         return JSONResponse({"status":"success" , "result":result , "isdebar":debbared})
     except Exception as e:
         print(type(e).__name__)
@@ -169,3 +179,6 @@ async def handle_form_submission(data:DataItem):
         print("returning=> " ,JSONResponse({"status":"failed"}))
         return JSONResponse({"status":"failed"})
     
+
+if __name__ =="__main__":
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
