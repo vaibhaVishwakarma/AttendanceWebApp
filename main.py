@@ -180,5 +180,4 @@ async def handle_form_submission(data:DataItem):
         return JSONResponse({"status":"failed"})
     
 
-if __name__ =="__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=55555, reload=True)
+
