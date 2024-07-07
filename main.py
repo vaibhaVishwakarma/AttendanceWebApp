@@ -8,7 +8,6 @@ from pydantic import BaseModel
 from datetime import datetime
 import pickle
 from mangum import Mangum
-
 from dependencies import uvicorn
 
 
@@ -181,4 +180,4 @@ async def handle_form_submission(data:DataItem):
     
 
 if __name__ =="__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("main:app", host="127.0.0.1", port=55333, reload=True)

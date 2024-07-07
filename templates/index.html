@@ -2,12 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Document</title>
     <link rel="stylesheet" href="../static/css/output.css">
     <!-- <link rel="stylesheet" href="./output.css"> -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/thinline.css">
-    <style>.paste-button {
+    <style>
+    body {
+        overflow-x:hidden;
+    }
+    .paste-button {
         position: relative;
         display: block;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -71,7 +75,7 @@
       }
       </style>
 </head>
-<body class="grid bg-gradient-to-r from-slate-600 to-slate-800">
+<body class="grid bg-gradient-to-r from-slate-600 to-slate-800 w-full">
     <!-- <body class="bg-slate-800"> -->
     {% if viewCount is defined %}<div class="text-extrabold place-items-center pt- h-[5px] text-center w-full text-xs text-slate-200">
         <h20> you are @ {{viewCount}} 🔥 viewer of this site 🤗</h20>
@@ -306,7 +310,7 @@ tb1.append(lastRow)
 table1.append(tb1)
 
 const form = document.querySelector("#timetable")
-form.className="py-1"
+form.className="py-1 overflow-x-auto"
 
 function getInputtd(i,j){
 const td = document.createElement("td")
