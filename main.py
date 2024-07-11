@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from datetime import datetime
 import pickle
 from mangum import Mangum
-from dependencies import uvicorn
+
 
 
 app=FastAPI()
