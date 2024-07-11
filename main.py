@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from datetime import datetime
 import pickle
 from mangum import Mangum
+from requests import get
 
 
 
@@ -33,13 +34,15 @@ templates = Jinja2Templates(directory = "templates")
 
 @app.get("/",response_class = HTMLResponse)
 async def getpage(request : Request):
+    countResponse = get("https://count.cab/hit/C1jAA1MiAo").json()
+
     with open("./static/counter.pkl" , "rb") as f:
         num = pickle.load(f)
         
     with open("./static/counter.pkl" , "wb") as f:
         print(num)
         pickle.dump(num+1 , f)
-    return templates.TemplateResponse("./index.html",{"request":request,"viewCount":num}) 
+    return templates.TemplateResponse("./index.html",{"request":request,"viewCount":countResponse["click"]}) 
 
 
 

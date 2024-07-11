@@ -74,11 +74,25 @@
         display: block;
       }
       </style>
+       <style>
+        .custom-large-text {
+            font-size: 2rem; /* Adjust as needed */
+        }
+        .counting {
+            opacity:80%;
+        }
+    </style>
 </head>
 <body class="grid bg-gradient-to-r from-slate-600 to-slate-800 w-full">
+    <div class="w-full grid place-items-center">
+        <span class="custom-large-text text-center w-[400px] !text-6xl py-4 delay-10 duration-1000 rounded-xl font-semibold text-slate-100 bg-gradient-to-r from-slate-500 to-slate-600 ">
+            Am I Debarred 🤔
+        </span>
+    </div>
+    
     <!-- <body class="bg-slate-800"> -->
-    {% if viewCount is defined %}<div class="text-extrabold place-items-center pt- h-[5px] text-center w-full text-xs text-slate-200">
-        <h20> you are @ {{viewCount}} 🔥 viewer of this site 🤗</h20>
+    {% if viewCount is defined %}<div class="text-extrabold  place-items-center pt- h-[5px] text-center w-full text-xs text-slate-200">
+        <h20 class="counting"> you are @ {{viewCount}} 🔥 viewer of this site 🤗</h20>
     </div>
     {% endif %}
     <!-- <div class = "text-white w-full"><h2>Am I Debbared</h2><br><h8>Attendance Calculator</h8></div> -->
