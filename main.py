@@ -8,7 +8,8 @@ from pydantic import BaseModel
 from datetime import datetime
 import pickle
 from mangum import Mangum
-from requests import get
+from requests import get, post
+import os
 
 
 
@@ -32,14 +33,52 @@ class ResponseModel(BaseModel):
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory = "templates")
 
+IMMANUEL_APP_KEY = os.getenv("IMMANUEL_APP_KEY", "jt0a3cqy")
+VIEW_COUNT_KEY = "count"
+IMMANUEL_BASE_URL = "https://keyvalue.immanuel.co/api/KeyVal"
+
 @app.get("/",response_class = HTMLResponse)
 async def getpage(request : Request):
-    try:
-        countResponse = get("https://count.cab/hit/C1jAA1MiAo").json()
-    except Exception as e:
-        countResponse = {'click':100}
+    return templates.TemplateResponse("./index.html",{"request":request})
 
-    return templates.TemplateResponse("./index.html",{"request":request,"viewCount":countResponse["click"]}) 
+
+@app.get("/api/view-count")
+async def update_view_count(request: Request):
+    should_set_cookie = False
+    if not request.cookies.get("view_counted"):
+        try:
+            post(
+                f"{IMMANUEL_BASE_URL}/ActOnValue/"
+                f"{IMMANUEL_APP_KEY}/{VIEW_COUNT_KEY}/Increment",
+                data="",
+                timeout=10,
+            ).raise_for_status()
+            should_set_cookie = True
+        except Exception:
+            return JSONResponse({"count": None})
+
+    count = None
+    try:
+        count_response = get(
+            f"{IMMANUEL_BASE_URL}/GetValue/"
+            f"{IMMANUEL_APP_KEY}/{VIEW_COUNT_KEY}",
+            timeout=10,
+        )
+        count_response.raise_for_status()
+        count = int(count_response.json())
+    except Exception:
+        pass
+
+    response = JSONResponse({"count": count})
+    if should_set_cookie:
+        response.set_cookie(
+            "view_counted",
+            "1",
+            max_age=60 * 60 * 24 * 365,
+            httponly=True,
+            samesite="lax",
+        )
+    return response
 
 
 

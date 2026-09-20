@@ -91,10 +91,24 @@
     </div>
     
     <!-- <body class="bg-slate-800"> -->
-    {% if viewCount is defined %}<div class="text-extrabold  place-items-center pt- h-[5px] text-center w-full text-xs text-slate-200">
-        <h20 class="counting"> you are @ {{viewCount}} 🔥 viewer of this site 🤗</h20>
+    <div class="text-extrabold place-items-center pt- h-[5px] text-center w-full text-xs text-slate-200">
+        <h20 class="counting"> you are @ <span id="view-count">...</span> 🔥 viewer of this site 🤗</h20>
     </div>
-    {% endif %}
+    <script>
+        async function updateViewCount() {
+            const countElement = document.getElementById("view-count");
+            try {
+                const response = await fetch("/api/view-count", { credentials: "same-origin" });
+                if (!response.ok) return;
+                const data = await response.json();
+                if (data.count !== null) countElement.textContent = data.count;
+            } catch (error) {
+                countElement.textContent = "--";
+            }
+        }
+
+        updateViewCount();
+    </script>
     <!-- <div class = "text-white w-full"><h2>Am I Debbared</h2><br><h8>Attendance Calculator</h8></div> -->
     <div class="wrapper  flex  w-full  px-4   pb-0 ">
         <div class="title flex items-center mb-[45px]">
