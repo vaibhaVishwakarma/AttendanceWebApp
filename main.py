@@ -25,7 +25,8 @@ app.add_middleware(
     allow_origins=allowed_origins,
     allow_origin_regex=(
         r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$|"
-        r"^https://[a-z0-9-]+\.app\.github\.dev$"
+        r"^https://[a-z0-9-]+\.app\.github\.dev$|"
+        r"^https://vaibhavishwakarma\.github\.io$"
     ),
     allow_credentials=True,
     allow_methods=["*"],
