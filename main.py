@@ -15,10 +15,15 @@ import os
 
 app=FastAPI()
 handler = Mangum(app)
-# Allow all origins for simplicity (configure this appropriately for production)
+allowed_origins = [
+    origin.strip()
+    for origin in os.getenv("ALLOWED_ORIGINS", "https://attendancewebapp.onrender.com").split(",")
+    if origin.strip()
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -36,6 +41,10 @@ templates = Jinja2Templates(directory = "templates")
 IMMANUEL_APP_KEY = os.getenv("IMMANUEL_APP_KEY", "jt0a3cqy")
 VIEW_COUNT_KEY = "count"
 IMMANUEL_BASE_URL = "https://keyvalue.immanuel.co/api/KeyVal"
+
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
 
 @app.get("/",response_class = HTMLResponse)
 async def getpage(request : Request):
